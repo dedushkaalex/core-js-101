@@ -325,8 +325,9 @@ function isCreditCardNumber(ccn) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  const sum = String(num).split('').reduce((acc, value) => +value + acc, 0);
+  return sum > 9 ? String(sum).split('').reduce((acc, value) => +value + acc, 0) : sum;
 }
 
 /**
@@ -350,8 +351,21 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const stack = [];
+  const obj = {
+    '[': ']',
+    '{': '}',
+    '(': ')',
+    '<': '>',
+  };
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] in obj) stack.push(str[i]);
+    else if (obj[str[i]] !== 'undefined') {
+      if (stack.length === 0 || obj[stack.pop()] !== str[i]) return false;
+    }
+  }
+  return stack.length === 0;
 }
 
 /**
@@ -374,8 +388,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 /**
@@ -390,8 +404,20 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  if (pathes.length === 0) return '';
+  let dirs = '';
+
+  const directories = pathes.map((path) => path.split('/'));
+  const minPath = directories.map((item) => item.length).sort((a, b) => a - b)[0];
+  for (let i = 0; i < minPath; i += 1) {
+    const directory = directories[0][i];
+    if (directories.every((d) => d[i] === directory)) {
+      dirs += `${directory}/`;
+    } else break;
+  }
+
+  return dirs;
 }
 
 /**
